@@ -42,7 +42,7 @@ public class CmdRevenge extends BaseCommand {
 			PacketSendUtility.sendMessage(admin, "Cannot use this command on yourself.");
 			return;
 		}
-                String message = "Игрок ["+admin.getName()+"] Желает сразиться с вами,Принять Приглашение?";
+                String message = "Player ["+admin.getName()+"] wants to fight with you. Agree?";
 	        RequestResponseHandler responseHandler = new RequestResponseHandler(player){
 
 	            public void acceptRequest(Creature requester, Player responder)
@@ -67,20 +67,20 @@ public class CmdRevenge extends BaseCommand {
         {
             TeleportService.teleportTo(player, 510010000, 256, 256, 49, 3000, true);
             TeleportService.teleportTo(admin, 520010000, 256, 256, 49, 3000, true);
-            MessagerAddition.announce(player, "[Revenge]: У вас есть 15 секунд на подготовку к битве!\nЧерез 15 секунд вы будете телепортированы к врагу!");
+            MessagerAddition.announce(player, "[Revenge]: You have 15 seconds to prepare to fight!\nAfter 15 seconds you will be teleported to the enemy!");
             ThreadPoolManager.getInstance().schedule(new Runnable() {
 
 		@Override
 		public void run() {
 	          TeleportService.teleportTo(admin, player.getWorldId(), player.getX(), player.getY(), player.getZ(), 3000, true);
-                  MessagerAddition.announce(player, "[Revenge]Битва Началась!");
+                  MessagerAddition.announce(player, "[Revenge] Fight ! Round 1");
                   if(player.getLifeStats().isAlreadyDead())
                   {
                       PlayerReviveService.revive(player, 100, 100, false);
                       PlayerReviveService.revive(admin, 100, 100, false);
                       adminscore += 1;
-                      MessagerAddition.announce(player, "[Revenge]Вы Проиграли В битве! Игрок" + admin.getName() + "Получает одно Очко");
-                      MessagerAddition.announce(admin, "[Revenge]Поздравляю!Вы Выйграли,вы получаете Одно очко в свой счет");
+                      MessagerAddition.announce(player, "[Revenge] You lost this battle. Player " + admin.getName() + " gets one point");
+                      MessagerAddition.announce(admin, "[Revenge] Congratulations, you won, you get one point to your account");
                       admIsWin1 = true;
                       restore(player);
                       restore(admin);
@@ -91,8 +91,8 @@ public class CmdRevenge extends BaseCommand {
                   {
                       PlayerReviveService.revive(admin, 100, 100, false);
                       PlayerReviveService.revive(player, 100, 100, false);
-                      MessagerAddition.announce(player, "[Revenge]Ни один не выйграл,никто не получает дополнительное очко");
-                      MessagerAddition.announce(admin, "[Revenge]Ни один не выйграл,никто не получает дополнительное очко");
+                      MessagerAddition.announce(player, "[Revenge] No one won, no one gets an extra point");
+                      MessagerAddition.announce(admin, "[Revenge] No one won, no one gets an extra point");
                       isDraw1 = true;
                       restore(player);
                       restore(admin);
@@ -103,8 +103,8 @@ public class CmdRevenge extends BaseCommand {
                   {
                       PlayerReviveService.revive(admin, 100, 100, false);
                       playerscore += 1;
-                      MessagerAddition.announce(player, "[Revenge]Поздравляю Вы Выйграли!Вы получаете одно дополнительное очко!");
-                      MessagerAddition.announce(admin, "[Revenge]Вы Проиграли,ваш противник получает дополнительное очко!");
+                      MessagerAddition.announce(player, "[Revenge] Congratulations, you won, you get one point to your account");
+                      MessagerAddition.announce(admin, "[Revenge] You lost this battle. Player " + player.getName() + " gets one point");
                       playerIsWin1 = true;
                       restore(player);
                       restore(admin);
@@ -113,11 +113,11 @@ public class CmdRevenge extends BaseCommand {
                   }
                   if(player.getWorldId() != 510010000)
                   {
-                      MessagerAddition.announceAll("[Revenge]: Игрок" + player.getName() + "Ушел с поля битвы!\nВыигрывает "+ admin.getName(), 0);
+                      MessagerAddition.announceAll("[Revenge] Player " + player.getName() + " left the battlefiel!\n"+ admin.getName() + " wins", 0);
                   }
                   if(admin.getWorldId() != 510010000)
                   {
-                      MessagerAddition.announceAll("[Revenge]: Игрок" + admin.getName() + "Ушел с поля битвы!\nВыигрывает "+ player.getName(), 0);
+                      MessagerAddition.announceAll("[Revenge] Player " + admin.getName() + " left the battlefiel!\n"+ player.getName() + " wins", 0);
                   }				  
                   else if (admIsWin1 || playerIsWin1 || isDraw1)
                    {
@@ -133,19 +133,19 @@ public class CmdRevenge extends BaseCommand {
         {
             TeleportService.teleportTo(player, 510010000, 256, 256, 49, 3000, true);
             TeleportService.teleportTo(admin, 520010000, 256, 256, 49, 3000, true);
-            MessagerAddition.announce(player, "[Revenge]: У вас есть 15 секунд на подготовку к битве!\nЧерез 15 секунд вы будете телепортированы к врагу!");
+            MessagerAddition.announce(player, "[Revenge]: You have 15 seconds to prepare to fight!\nAfter 15 seconds you will be teleported to the enemy!");
             ThreadPoolManager.getInstance().schedule(new Runnable() {
 
 		@Override
 		public void run() {
 	          TeleportService.teleportTo(admin, player.getWorldId(), player.getX(), player.getY(), player.getZ(), 3000, true);
-                  MessagerAddition.announce(player, "[Revenge]Битва Началась!Раунд 2");
+                  MessagerAddition.announce(player, "[Revenge] Fight! Round 2");
                   if(player.getLifeStats().isAlreadyDead())
                   {
                       PlayerReviveService.revive(player, 100, 100, false);	  
                       adminscore += 1;
-                      MessagerAddition.announce(player, "[Revenge]Вы Проиграли В битве! Игрок" + admin.getName() + "Получает одно Очко");
-                      MessagerAddition.announce(admin, "[Revenge]Поздравляю!Вы Выйграли,вы получаете Одно очко в свой счет");
+                      MessagerAddition.announce(player, "[Revenge] You lost this battle. Player " + admin.getName() + " gets one point");
+                      MessagerAddition.announce(admin, "[Revenge] Congratulations, you won, you get one point to your account");
                       admIsWin2 = true;
                       restore(player);
                       restore(admin);
@@ -156,8 +156,8 @@ public class CmdRevenge extends BaseCommand {
                   {
                       PlayerReviveService.revive(admin, 100, 100, false);
                       PlayerReviveService.revive(player, 100, 100, false);
-                      MessagerAddition.announce(player, "[Revenge]Ни один не выйграл,никто не получает дополнительное очко");
-                      MessagerAddition.announce(admin, "[Revenge]Ни один не выйграл,никто не получает дополнительное очко");
+                      MessagerAddition.announce(player, "[Revenge] No one won, no one gets an extra point");
+                      MessagerAddition.announce(admin, "[Revenge] No one won, no one gets an extra point");
                       isDraw2 = true;
                       restore(player);
                       restore(admin);
@@ -168,8 +168,8 @@ public class CmdRevenge extends BaseCommand {
                   {
                       PlayerReviveService.revive(admin, 100, 100, false);
                       playerscore += 1;
-                      MessagerAddition.announce(player, "[Revenge]Поздравляю Вы Выйграли!Вы получаете одно дополнительное очко!");
-                      MessagerAddition.announce(admin, "[Revenge]Вы Проиграли,ваш противник получает дополнительное очко!");
+                      MessagerAddition.announce(player, "[Revenge] Congratulations, you won, you get one point to your account");
+                      MessagerAddition.announce(admin, "[Revenge] You lost this battle. Player " + player.getName() + " gets one point");
                       playerIsWin2 = true;
                       restore(player);
                       restore(admin);
@@ -182,12 +182,12 @@ public class CmdRevenge extends BaseCommand {
                   }
                   if(player.getWorldId() != 510010000)
                   {
-                      MessagerAddition.announceAll("[Revenge]: Игрок" + player.getName() + "Ушел с поля битвы!\nВыигрывает "+ admin.getName(), 0);
+                      MessagerAddition.announceAll("[Revenge] Player " + player.getName() + " left the battlefiel!\n"+ admin.getName() + " wins", 0);
                   }
                   if(admin.getWorldId() != 510010000)
                   {
-                      MessagerAddition.announceAll("[Revenge]: Игрок" + admin.getName() + "Ушел с поля битвы!\nВыигрывает "+ player.getName(), 0);
-                  }
+                      MessagerAddition.announceAll("[Revenge] Player " + admin.getName() + " left the battlefiel!\n"+ player.getName() + " wins", 0);
+                  }	
                   
                    
 		}
@@ -199,19 +199,19 @@ public class CmdRevenge extends BaseCommand {
         {
             TeleportService.teleportTo(player, 510010000, 256, 256, 49, 3000, true);
             TeleportService.teleportTo(admin, 520010000, 256, 256, 49, 3000, true);
-            MessagerAddition.announce(player, "[Revenge]: У вас есть 15 секунд на подготовку к битве!\nЧерез 15 секунд вы будете телепортированы к врагу!");
+            MessagerAddition.announce(player, "[Revenge]: You have 15 seconds to prepare to fight!\nAfter 15 seconds you will be teleported to the enemy!");
             ThreadPoolManager.getInstance().schedule(new Runnable() {
 
 		@Override
 		public void run() {
 	          TeleportService.teleportTo(admin, player.getWorldId(), player.getX(), player.getY(), player.getZ(), 3000, true);
-                  MessagerAddition.announce(player, "[Revenge]Битва Началась!Раунд 2");
+                  MessagerAddition.announce(player, "[Revenge] Fight! Round 3");
                   if(player.getLifeStats().isAlreadyDead())
                   {
                       PlayerReviveService.revive(player, 100, 100, false);	  
                       adminscore += 1;
-                      MessagerAddition.announce(player, "[Revenge]Вы Проиграли В битве! Игрок" + admin.getName() + "Получает одно Очко");
-                      MessagerAddition.announce(admin, "[Revenge]Поздравляю!Вы Выйграли,вы получаете Одно очко в свой счет");
+                      MessagerAddition.announce(player, "[Revenge] You lost this battle. Player " + admin.getName() + " gets one point");
+                      MessagerAddition.announce(admin, "[Revenge] Congratulations, you won, you get one point to your account");
                       admIsWin2 = true;
                       restore(player);
                       restore(admin);
@@ -222,8 +222,8 @@ public class CmdRevenge extends BaseCommand {
                   {
                       PlayerReviveService.revive(admin, 100, 100, false);
                       PlayerReviveService.revive(player, 100, 100, false);
-                      MessagerAddition.announce(player, "[Revenge]Ни один не выйграл,никто не получает дополнительное очко");
-                      MessagerAddition.announce(admin, "[Revenge]Ни один не выйграл,никто не получает дополнительное очко");
+                      MessagerAddition.announce(player, "[Revenge] No one won, no one gets an extra point");
+                      MessagerAddition.announce(admin, "[Revenge] No one won, no one gets an extra point");
                       isDraw2 = true;
                       restore(player);
                       restore(admin);
@@ -234,8 +234,8 @@ public class CmdRevenge extends BaseCommand {
                   {
                       PlayerReviveService.revive(admin, 100, 100, false);
                       playerscore += 1;
-                      MessagerAddition.announce(player, "[Revenge]Поздравляю Вы Выйграли!Вы получаете одно дополнительное очко!");
-                      MessagerAddition.announce(admin, "[Revenge]Вы Проиграли,ваш противник получает дополнительное очко!");
+                      MessagerAddition.announce(player, "[Revenge] Congratulations, you won, you get one point to your account");
+                      MessagerAddition.announce(admin, "[Revenge] You lost this battle. Player " + player.getName() + " gets one point");
                       playerIsWin2 = true;
                       restore(player);
                       restore(admin);
@@ -248,12 +248,12 @@ public class CmdRevenge extends BaseCommand {
                   }
                   if(player.getWorldId() != 510010000)
                   {
-                      MessagerAddition.announceAll("[Revenge]: Игрок" + player.getName() + "Ушел с поля битвы!\nВыигрывает "+ admin.getName(), 0);
+                      MessagerAddition.announceAll("[Revenge] Player " + player.getName() + " left the battlefiel!\n"+ admin.getName() + " wins", 0);
                   }
                   if(admin.getWorldId() != 510010000)
                   {
-                      MessagerAddition.announceAll("[Revenge]: Игрок" + admin.getName() + "Ушел с поля битвы!\nВыигрывает "+ player.getName(), 0);
-                  }
+                      MessagerAddition.announceAll("[Revenge] Player " + admin.getName() + " left the battlefiel!\n"+ player.getName() + " wins", 0);
+                  }	
                   
                    
 		}
@@ -263,7 +263,7 @@ public class CmdRevenge extends BaseCommand {
         }
         private void onEnd(final Player player, final Player admin)
         {
-            MessagerAddition.announceAll("[Revenge]:И так результаты битвы " + admin.getName() + "vs" +player.getName(), 0);
+            MessagerAddition.announceAll("[Revenge] And the results of the battle " + admin.getName() + " vs " +player.getName(), 0);
              ThreadPoolManager.getInstance().schedule(new Runnable() {
              
 	@Override
@@ -271,14 +271,14 @@ public class CmdRevenge extends BaseCommand {
               
 		if(adminscore == playerscore)
                 {
-                    MessagerAddition.announceAll("[Revenge]: И так результаты битвы " + admin.getName() + "vs" +player.getName() + " <НИЧЬЯ> !", 0);
+                    MessagerAddition.announceAll("[Revenge] And the results of the battle " + admin.getName() + " vs " +player.getName() + " <DRAW> !", 0);
                 }
                 if(adminscore > playerscore)
                 {
-                    MessagerAddition.announceAll("[Revenge]: И так результаты битвы " + admin.getName() + "vs" +player.getName() + " - " + admin.getName() + " Выигрывает!", 0);
+                    MessagerAddition.announceAll("[Revenge] And the results of the battle " + admin.getName() + " vs " +player.getName() + " - " + admin.getName() + " wins!", 0);
                 }
                 else
-                    MessagerAddition.announceAll("[Revenge]: И так результаты битвы " + admin.getName() + "vs" +player.getName() + " - " + player.getName() + " Выигрывает!", 0);
+                    MessagerAddition.announceAll("[Revenge] And the results of the battle " + admin.getName() + "vs" +player.getName() + " - " + player.getName() + " wins!", 0);
                 TeleportService.moveToBindLocation(player, true);
                 TeleportService.moveToBindLocation(admin, true);
                 admIsWin1 = false;
