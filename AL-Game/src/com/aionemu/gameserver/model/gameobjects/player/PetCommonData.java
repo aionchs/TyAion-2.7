@@ -17,10 +17,17 @@
 package com.aionemu.gameserver.model.gameobjects.player;
 
 import java.sql.Timestamp;
-
 import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.gameserver.dao.PlayerPetsDAO;
+import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.templates.VisibleObjectTemplate;
+import com.aionemu.gameserver.model.templates.item.ItemTemplate;
+import com.aionemu.gameserver.model.templates.item.actions.AdoptPetAction;
+import com.aionemu.gameserver.model.templates.pet.PetDopingBag;
+import com.aionemu.gameserver.model.templates.pet.PetFunctionType;
+import com.aionemu.gameserver.model.templates.pet.PetTemplate;
+import com.aionemu.gameserver.services.toypet.PetFeedProgress;
+import com.aionemu.gameserver.services.toypet.PetHungryLevel;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.utils.idfactory.IDFactory;
 
@@ -33,10 +40,10 @@ public class PetCommonData extends VisibleObjectTemplate {
 	private String name;
 	private final int petId;
 	private Timestamp birthday;
-	private int hungryLevel;
 
-	private int nrFood = 0;
-	private boolean cancelFood = false;
+	PetFeedProgress feedProgress = null;
+	PetDopingBag dopingBag = null;
+	private volatile boolean cancelFeed = false;
 	private boolean feedingTime = true;
 	private long curentTime;
 
@@ -45,16 +52,27 @@ public class PetCommonData extends VisibleObjectTemplate {
 
 	private long startMoodTime;
 	private int shuggleCounter;
-
 	private int lastSentPoints;
 	private long moodCdStarted;
 	private long giftCdStarted;
 	private Timestamp despawnTime;
 
+	private boolean isLooting = false;
+	private boolean isBuffing = false;
+
 	public PetCommonData(int petId, int masterObjectId) {
 		this.petObjectId = IDFactory.getInstance().nextId();
 		this.petId = petId;
 		this.masterObjectId = masterObjectId;
+		PetTemplate template = DataManager.PET_DATA.getPetTemplate(petId);
+		if (template.ContainsFunction(PetFunctionType.FOOD)) {
+			int flavourId = template.getPetFunction(PetFunctionType.FOOD).getId();
+			int lovedLimit = DataManager.PET_FEED_DATA.getFlavourById(flavourId).getLovedFoodLimit();
+			feedProgress = new PetFeedProgress((byte) (lovedLimit & 0xFF));
+		}
+		if (template.ContainsFunction(PetFunctionType.DOPING)) {
+			dopingBag = new PetDopingBag();
+		}
 	}
 
 	public final int getDecoration() {
@@ -93,14 +111,6 @@ public class PetCommonData extends VisibleObjectTemplate {
 		this.birthday = birthday;
 	}
 
-	public int getHungryLevel() {
-		return hungryLevel;
-	}
-
-	public void setHungryLevel(int hungryLevel) {
-		this.hungryLevel = hungryLevel;
-	}
-
 	public long getCurentTime() {
 		return curentTime;
 	}
@@ -118,20 +128,12 @@ public class PetCommonData extends VisibleObjectTemplate {
 		return feedingTime;
 	}
 
-	public boolean getCancelFood() {
-		return cancelFood;
+	public boolean getCancelFeed() {
+		return cancelFeed;
 	}
 
-	public void setCancelFood(boolean cancelFood) {
-		this.cancelFood = cancelFood;
-	}
-
-	public int getNrFood() {
-		return nrFood;
-	}
-
-	public void setNrFood(int nrFood) {
-		this.nrFood = nrFood;
+	public void setCancelFeed(boolean cancelFeed) {
+		this.cancelFeed = cancelFeed;
 	}
 
 	/**
@@ -149,6 +151,7 @@ public class PetCommonData extends VisibleObjectTemplate {
 			public void run() {
 				feedingTime = true;
 				curentTime = 0;
+				feedProgress.setHungryLevel(PetHungryLevel.HUNGRY);
 			}
 		}, reFoodTime);
 	}
@@ -298,6 +301,40 @@ public class PetCommonData extends VisibleObjectTemplate {
 	 */
 	public void savePetMoodData() {
 		DAOManager.getDAO(PlayerPetsDAO.class).savePetMoodData(this);
+	}
+
+	/**
+	 * @return feedProgress, null if pet has no feed function
+	 */
+	public PetFeedProgress getFeedProgress() {
+		return feedProgress;
+	}
+
+	public void setIsLooting(boolean isLooting) {
+		this.isLooting = isLooting;
+	}
+
+	public boolean isLooting() {
+		return this.isLooting;
+	}
+
+	public PetDopingBag getDopingBag() {
+		return dopingBag;
+	}
+
+	public void setIsBuffing(boolean isBuffing) {
+		this.isBuffing = isBuffing;
+	}
+
+	public boolean isBuffing() {
+		return this.isBuffing;
+	}
+
+	public AdoptPetAction getAdoptAction() {
+		ItemTemplate eggTemplate = DataManager.ITEM_DATA.getPetEggTemplate(petId);
+		if (eggTemplate == null || eggTemplate.getActions() == null)
+			return null;
+		return eggTemplate.getActions().getAdoptPetAction();
 	}
 
 }
