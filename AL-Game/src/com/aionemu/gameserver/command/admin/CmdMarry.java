@@ -22,13 +22,13 @@ public class CmdMarry extends BaseCommand {
 			return;
 		}
 
-		if (params == null || params.length != 3) {
+		if (params == null || params.length != 2) {
 			showHelp(admin);
 			return;
 		}
 
-		Player partner1 = World.getInstance().findPlayer(Util.convertName(params[1]));
-		Player partner2 = World.getInstance().findPlayer(Util.convertName(params[2]));
+		Player partner1 = World.getInstance().findPlayer(Util.convertName(params[0]));
+		Player partner2 = World.getInstance().findPlayer(Util.convertName(params[1]));
 		if (partner1 == null || partner2 == null) {
 			PacketSendUtility.sendMessage(admin, "The specified player is not online.");
 			return;
