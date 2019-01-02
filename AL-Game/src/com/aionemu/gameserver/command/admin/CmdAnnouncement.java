@@ -12,10 +12,6 @@ public class CmdAnnouncement extends BaseCommand {
 	
 	
 	public void execute(Player admin, String... params) {
-		if (params.length == 1) {
-			showHelp(admin);
-			return ;
-		}
 	
 		if (params[1].equalsIgnoreCase("list")) {
 			Set<Announcement> announces = AnnouncementService.getInstance().getAnnouncements();
@@ -28,7 +24,7 @@ public class CmdAnnouncement extends BaseCommand {
 					+ announce.getDelay() + "  |  " + announce.getAnnounce());
 		}
 		else if (params[1].equalsIgnoreCase("add")) {
-			if (params.length < 6) {
+			if (params.length < 5) {
 				showHelp(admin);
 				return;
 			}
@@ -64,7 +60,7 @@ public class CmdAnnouncement extends BaseCommand {
 			PacketSendUtility.sendMessage(admin, "The announcement has been created with successful !");
 		}
 		else if (params[1].equalsIgnoreCase("delete")) {
-			if ((params.length < 3)) {
+			if ((params.length < 2)) {
 				showHelp(admin);
 				return;
 			}
