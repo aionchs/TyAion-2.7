@@ -218,6 +218,9 @@ public class SpawnEngine {
 				if (spawn.isPartialDaySpawn()) {
 					DayTimeSpawnEngine.addSpawnGroup(spawn);
 				}
+				else if (spawn.isTemporarySpawn()) {
+					TemporarySpawnEngine.addSpawnGroup(spawn);
+				}
 				else {
 					if (spawn.getHandlerType() != null) {
 						switch (spawn.getHandlerType()) {

@@ -116,8 +116,13 @@ public class SpawnGroup2 {
 		this.respawnTime = respawnTime;
 	}
 
+	@Deprecated
 	public boolean isPartialDaySpawn() {
 		return !getSpawnTime().equals(SpawnTime.ALL);
+	}
+	
+	public boolean isTemporarySpawn() {
+		return temporarySpawn != null;
 	}
 
 	public SpawnHandlerType getHandlerType() {
