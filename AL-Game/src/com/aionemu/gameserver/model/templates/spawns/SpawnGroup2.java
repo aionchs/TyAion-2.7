@@ -34,6 +34,7 @@ public class SpawnGroup2 {
 	private int npcId;
 	private int pool;
 	private SpawnTime spawnTime = SpawnTime.ALL;
+	private TemporarySpawn temporarySpawn;
 	private int respawnTime;
 	private SpawnHandlerType handlerType;
 	private List<SpawnTemplate> spots = new ArrayList<SpawnTemplate>();
@@ -62,6 +63,7 @@ public class SpawnGroup2 {
 	}
 
 	private void initializing(Spawn spawn) {
+		temporarySpawn = spawn.getTemporarySpawn();
 		spawnTime = spawn.getSpawnTime();
 		respawnTime = spawn.getRespawnTime();
 		pool = spawn.getPool();
@@ -88,6 +90,10 @@ public class SpawnGroup2 {
 
 	public int getNpcId() {
 		return npcId;
+	}
+	
+	public TemporarySpawn geTemporarySpawn() {
+		return temporarySpawn;
 	}
 
 	public SpawnTime getSpawnTime() {

@@ -21,6 +21,7 @@ package com.aionemu.gameserver.model;
  */
 public enum TaskId {
 	DECAY,
+	RESPAWN,
 	PRISON,
 	PROTECTION_ACTIVE,
 	DROWN,
