@@ -215,11 +215,11 @@ public class SpawnEngine {
 		int spawnedCounter = 0;
 		if (worldSpawns != null) {
 			for (SpawnGroup2 spawn : worldSpawns) {
-				if (spawn.isPartialDaySpawn()) {
-					DayTimeSpawnEngine.addSpawnGroup(spawn);
-				}
-				else if (spawn.isTemporarySpawn()) {
+				if (spawn.isTemporarySpawn()) {
 					TemporarySpawnEngine.addSpawnGroup(spawn);
+				}
+				else if (spawn.isPartialDaySpawn()) {
+					DayTimeSpawnEngine.addSpawnGroup(spawn);
 				}
 				else {
 					if (spawn.getHandlerType() != null) {
