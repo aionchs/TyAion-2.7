@@ -67,6 +67,9 @@ public class SpawnEngine {
 
 				}, 1000);
 		}
+		
+		spawn.setVisibleObject(visObj);
+		
 		return visObj;
 	}
 
