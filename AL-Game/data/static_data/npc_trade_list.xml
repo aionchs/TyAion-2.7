@@ -669,7 +669,7 @@
 		<tradelist id="199"/>
 		<tradelist id="200"/>
 	</tradelist_template>
-	<tradelist_template npc_id="203709" name="clymene" sell_price_rate="500">
+	<tradelist_template npc_id="203709" name="clymene" sell_price_rate="50000">
 		<tradelist id="930"/>
 		<tradelist id="931"/>
 		<tradelist id="932"/>
@@ -895,7 +895,7 @@
 		<tradelist id="379"/>
 		<tradelist id="380"/>
 	</tradelist_template>
-	<tradelist_template npc_id="204051" name="vergelmir" sell_price_rate="500">
+	<tradelist_template npc_id="204051" name="vergelmir" sell_price_rate="50000">
 		<tradelist id="934"/>
 		<tradelist id="935"/>
 		<tradelist id="936"/>
