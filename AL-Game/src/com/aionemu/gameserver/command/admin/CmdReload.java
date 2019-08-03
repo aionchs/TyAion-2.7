@@ -54,6 +54,7 @@ import com.aionemu.gameserver.spawnengine.SpawnEngine;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
+import com.aionemu.gameserver.configs.Config;
 
 
 
@@ -90,11 +91,11 @@ public class CmdReload extends BaseCommand {
 				QuestEngine.getInstance().load();
 			}
 			catch (Exception e) {
-				PacketSendUtility.sendMessage(admin, "Quest reload failed!");
-				log.error("quest reload fail", e);
+				PacketSendUtility.sendMessage(admin, "任务重新加载失败!");
+				log.error("任务重新加载失败", e);
 			}
 			finally {
-				PacketSendUtility.sendMessage(admin, "Quest reload Success!");
+				PacketSendUtility.sendMessage(admin, "任务重新加载成功!");
 			}
 		}
 		else if (params[0].equals("skill")) {
@@ -113,11 +114,11 @@ public class CmdReload extends BaseCommand {
 				DataManager.SKILL_DATA.initializeCooldownGroups();
 			}
 			catch (Exception e) {
-				PacketSendUtility.sendMessage(admin, "Skill reload failed!");
-				log.error("Skill reload failed!", e);
+				PacketSendUtility.sendMessage(admin, "技能重新加载失败!");
+				log.error("技能重新加载失败!", e);
 			}
 			finally {
-				PacketSendUtility.sendMessage(admin, "Skill reload Success!");
+				PacketSendUtility.sendMessage(admin, "技能重新加载成功!");
 			}
 		}
 		else if (params[0].equals("portal")) {
@@ -206,12 +207,16 @@ public class CmdReload extends BaseCommand {
 				throw new Error("Drop reload failed!", e);
 			}
 			finally {
-				PacketSendUtility.sendMessage(admin, "Drop reload Success!");
+				PacketSendUtility.sendMessage(admin, "载入掉落成功!");
 			}
 		}
 		else if (params[0].equals("gameshop")) {
 			InGameShopEn.getInstance().reload();
-			PacketSendUtility.sendMessage(admin, "Gameshop successfully reloaded!");
+			PacketSendUtility.sendMessage(admin, "载入游戏商城成功!");
+		}
+		else if (params[0].equals("config")) {
+			Config.reload();
+			PacketSendUtility.sendMessage(admin, "载入配置文件成功!");
 		}
 	else if (params[0].equals("ai2")){
 	

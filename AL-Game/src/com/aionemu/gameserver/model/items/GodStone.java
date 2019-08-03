@@ -16,6 +16,8 @@
  */
 package com.aionemu.gameserver.model.items;
 
+import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
+import com.aionemu.gameserver.utils.PacketSendUtility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,8 +96,8 @@ public class GodStone extends ItemStone {
 					//log.info("[GODSTONE] stone proc monster needed for another proc : "+ hitCount);
 					//log.info("[DEBUG] Godstone attack successfull from " + player.getName() + " on " + creature.getName() + " with GS " 
 					//		+ godstoneInfo.getSkillid() + " and score of " + round + " < " + handProbability);
-					Skill skill = SkillEngine.getInstance().getSkill(player, godstoneInfo.getSkillid(),
-						godstoneInfo.getSkilllvl(), player.getTarget(), godItem);
+					Skill skill = SkillEngine.getInstance().getSkill(player, godstoneInfo.getSkillid(), godstoneInfo.getSkilllvl(), player.getTarget(), godItem);
+					PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_SKILL_PROC_EFFECT_OCCURRED(skill.getSkillTemplate().getNameId()));
 					skill.setFirstTargetRangeCheck(false);
 					if (skill.canUseSkill()) {
 						Effect effect = new Effect(player, creature, skill.getSkillTemplate(), 1, 0, godItem);

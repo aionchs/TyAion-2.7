@@ -207,4 +207,166 @@ public class Config {
 
 		IPConfig.load();
 	}
+
+	public static void reload() {
+		try {
+			Properties myProps = null;
+			try {
+				log.info("重载: mygs.properties");
+				myProps = PropertiesUtils.load("./config/mygs.properties");
+			}
+			catch (Exception e) {
+				log.info("No override properties found");
+			}
+
+			// Administration
+			Util.printSection("管理员配置");
+			String administration = "./config/administration";
+
+			Properties[] adminProps = PropertiesUtils.loadAllFromDirectory(administration);
+			PropertiesUtils.overrideProperties(adminProps, myProps);
+
+			ConfigurableProcessor.process(AdminConfig.class, adminProps);
+			log.info("重载: " + administration + "/admin.properties");
+
+			ConfigurableProcessor.process(DeveloperConfig.class, adminProps);
+			log.info("重载: " + administration + "/developer.properties");
+
+			// Main
+			Util.printSection("主配置");
+			String main = "./config/main";
+
+			Properties[] mainProps = PropertiesUtils.loadAllFromDirectory(main);
+			PropertiesUtils.overrideProperties(mainProps, myProps);
+
+			ConfigurableProcessor.process(AIConfig.class, mainProps);
+			log.info("重载: " + main + "/ai.properties");
+
+			ConfigurableProcessor.process(CommonsConfig.class, mainProps);
+			log.info("重载: " + main + "/commons.properties");
+
+			ConfigurableProcessor.process(CacheConfig.class, mainProps);
+			log.info("重载: " + main + "/cache.properties");
+
+			ConfigurableProcessor.process(CraftConfig.class, mainProps);
+			log.info("重载: " + main + "/craft.properties");
+
+			ConfigurableProcessor.process(CustomConfig.class, mainProps);
+			log.info("重载: " + main + "/custom.properties");
+
+			ConfigurableProcessor.process(DredgionConfig.class, mainProps);
+			log.info("重载: " + main + "/dredgion.properties");
+
+			ConfigurableProcessor.process(DropConfig.class, mainProps);
+			log.info("重载: " + main + "/drop.properties");
+
+			ConfigurableProcessor.process(EnchantsConfig.class, mainProps);
+			log.info("重载: " + main + "/enchants.properties");
+
+			ConfigurableProcessor.process(FallDamageConfig.class, mainProps);
+			log.info("重载: " + main + "/falldamage.properties");
+
+			ConfigurableProcessor.process(GSConfig.class, mainProps);
+			log.info("重载: " + main + "/gameserver.properties");
+
+			ConfigurableProcessor.process(GeoDataConfig.class, mainProps);
+			log.info("重载: " + main + "/geodata.properties");
+
+			ConfigurableProcessor.process(GroupConfig.class, mainProps);
+			log.info("重载: " + main + "/group.properties");
+
+			ConfigurableProcessor.process(HTMLConfig.class, mainProps);
+			log.info("重载: " + main + "/html.properties");
+
+			ConfigurableProcessor.process(InGameShopConfig.class, mainProps);
+			log.info("重载: " + main + "/ingameshop.properties");
+
+			ConfigurableProcessor.process(LegionConfig.class, mainProps);
+			log.info("重载: " + main + "/legion.properties");
+
+			ConfigurableProcessor.process(LoggingConfig.class, mainProps);
+			log.info("重载: " + main + "/logging.properties");
+
+			ConfigurableProcessor.process(MembershipConfig.class, mainProps);
+			log.info("重载: " + main + "/membership.properties");
+
+			ConfigurableProcessor.process(PeriodicSaveConfig.class, mainProps);
+			log.info("重载: " + main + "/periodicsave.properties");
+
+			ConfigurableProcessor.process(PricesConfig.class, mainProps);
+			log.info("重载: " + main + "/prices.properties");
+
+			ConfigurableProcessor.process(RankingConfig.class, mainProps);
+			log.info("重载: " + main + "/ranking.properties");
+
+			ConfigurableProcessor.process(RateConfig.class, mainProps);
+			log.info("重载: " + main + "/rates.properties");
+
+			ConfigurableProcessor.process(ShutdownConfig.class, mainProps);
+			log.info("重载: " + main + "/shutdown.properties");
+
+			ConfigurableProcessor.process(SiegeConfig.class, mainProps);
+			log.info("重载: " + main + "/siege.properties");
+
+			ConfigurableProcessor.process(ThreadConfig.class, mainProps);
+			log.info("重载: " + main + "/thread.properties");
+
+			ConfigurableProcessor.process(WorldConfig.class, mainProps);
+			log.info("重载: " + main + "/world.properties");
+
+			ConfigurableProcessor.process(PlayerTransferConfig.class, mainProps);
+			log.info("重载: " + main + "/playertransfer.properties");
+
+			ConfigurableProcessor.process(WeddingsConfig.class, mainProps);
+			log.info("重载: " + main + "/weddings.properties");
+
+			ConfigurableProcessor.process(PunishmentConfig.class, mainProps);
+			log.info("重载: " + main + "/punishment.properties");
+
+			ConfigurableProcessor.process(PvPConfig.class, mainProps);
+			log.info("重载: " + main + "/PvP.properties");
+
+			ConfigurableProcessor.process(EventsConfig.class, mainProps);
+			log.info("重载: " + main + "/events.properties");
+
+			// ConfigurableProcessor.process(GlobalityConfig.class, mainProps);
+			//log.info("重载: " + main + "/globality.properties");
+
+			// Network
+			Util.printSection("网络配置");
+			String network = "./config/network";
+
+			Properties[] networkProps = PropertiesUtils.loadAllFromDirectory(network);
+			PropertiesUtils.overrideProperties(networkProps, myProps);
+
+			log.info("重载: " + network + "/database.properties");
+			ConfigurableProcessor.process(DatabaseConfig.class, networkProps);
+			log.info("重载: " + network + "/network.properties");
+			ConfigurableProcessor.process(NetworkConfig.class, networkProps);
+
+
+			Util.printSection("自定义配置");
+			String custom = "./config/custom";
+
+			Properties[] customProps = PropertiesUtils.loadAllFromDirectory(custom);
+			PropertiesUtils.overrideProperties(customProps, myProps);
+
+			log.info("重载: " + custom + "/customDrop.properties");
+			ConfigurableProcessor.process(CustomDrop.class, customProps);
+
+			log.info("重载: " + custom + "/recursiveAdd.properties");
+			ConfigurableProcessor.process(RecursiveAddConf.class, customProps);
+			log.info("重载: " + custom + "/customfun.properties");
+			ConfigurableProcessor.process(CustomFun.class, customProps);
+			log.info("重载: " + custom + "/webshop.properties");
+			ConfigurableProcessor.process(WebShopConf.class, customProps);
+
+		}
+		catch (Exception e) {
+			log.error("无法重新加载配置: ", e);
+			throw new Error("无法重新加载配置: ", e);
+		}
+
+		IPConfig.load();
+	}
 }

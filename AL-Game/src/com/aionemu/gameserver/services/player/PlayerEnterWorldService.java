@@ -206,10 +206,7 @@ public final class PlayerEnterWorldService {
 
 		if (player != null && client.setActivePlayer(player)) {
 			player.setClientConnection(client);
-			
-
-			log.info("[MAC_AUDIT] Player " + player.getName() + " (account " + account.getName()
-					+ ") has entered world with " + client.getMacAddress() + " MAC.");
+			log.info("[审计]角色名: " + player.getName() + " 帐号: " + account.getName() + " 网卡: " + client.getMacAddress());
 			World.getInstance().storeObject(player);
 			SerialKillerService.getInstance().onLogin(player);
 			StigmaService.onPlayerLogin(player);
@@ -311,17 +308,15 @@ public final class PlayerEnterWorldService {
 			client.sendPacket(new SM_ABYSS_RANK(player.getAbyssRank()));
 
 			// Intro message
-			PacketSendUtility.sendWhiteMessage(player, " " + GSConfig.SERVER_NAME + " ");
-			//PacketSendUtility.sendYellowMessage(player, serverIntro);
-			//PacketSendUtility.sendBrightYellowMessage(player, serverInfo);
-			if (GSConfig.SERVER_MOTD_DISPLAYREV) {
-				PacketSendUtility.sendYellowMessage(player, "-----------------------------");
-				PacketSendUtility.sendYellowMessage(player, "REV: " + GSConfig.SERVER_REV);
-			}
-			if (GSConfig.SERVER_MOTD.length() > 0) {
-				PacketSendUtility.sendYellowMessage(player, "-----------------------------");
-				PacketSendUtility.sendYellowMessage(player, GSConfig.SERVER_MOTD);
-			}
+			//		PacketSendUtility.sendYellowMessage(player, "黄色提示");
+			//		PacketSendUtility.sendWhiteMessage(player, serverName);
+			//		PacketSendUtility.sendYellowMessage(player, serverIntro);
+			//		PacketSendUtility.sendBrightYellowMessage(player, serverInfo);
+			//		PacketSendUtility.sendYellowMessage(player, alInfo);
+			//		游戏时间剩余%*0。之后使用预付费制。
+			//		后游戏时间即将结束。如果您想继续使用服务，请登录游戏充值页面充值。
+			//		PacketSendUtility.sendMessage(player, account.getAccountTime().getAccumulatedOnlineMinutes() + "分钟后游戏时间即将结束。如果您想继续使用服务，请登录游戏充值页面充值。");
+			//		PacketSendUtility.sendMessage(player, "剩余的游戏时间时间为" + account.getAccountTime().getAccumulatedOnlineMinutes() + "小时31分。");
 			
 			player.setRates(Rates.getRatesFor(client.getAccount().getMembership()));
 			if (CustomConfig.PREMIUM_NOTIFY) {
@@ -350,34 +345,34 @@ public final class PlayerEnterWorldService {
 					PacketSendUtility.sendMessage(player, "=============================");
 					if (AdminConfig.INVULNERABLE_GM_CONNECTION) {
 						player.setInvul(true);
-						PacketSendUtility.sendMessage(player, ">> Connection in Invulnerable mode <<");
+						PacketSendUtility.sendMessage(player, ">> 进入无敌模式 <<");
 					}
 					if (AdminConfig.INVISIBLE_GM_CONNECTION) {
 						player.getEffectController().setAbnormal(AbnormalState.HIDE.getId());
 						player.setVisualState(CreatureVisualState.HIDE3);
 						PacketSendUtility.broadcastPacket(player, new SM_PLAYER_STATE(player), true);
-						PacketSendUtility.sendMessage(player, ">> Connection in Invisible mode <<");
+						PacketSendUtility.sendMessage(player, ">> 进入隐身模式 <<");
 					}
 					if (AdminConfig.ENEMITY_MODE_GM_CONNECTION.equalsIgnoreCase("Neutral")) {
 						player.setAdminNeutral(3);
 						player.setAdminEnmity(0);
-						PacketSendUtility.sendMessage(player, ">> Connection in Neutral mode <<");
+						PacketSendUtility.sendMessage(player, ">> 敌对模式：正常 <<");
 					}
 					if (AdminConfig.ENEMITY_MODE_GM_CONNECTION.equalsIgnoreCase("Enemy")) {
 						player.setAdminNeutral(0);
 						player.setAdminEnmity(3);
-						PacketSendUtility.sendMessage(player, ">> Connection in Enemy mode <<");
+						PacketSendUtility.sendMessage(player, ">> 敌对模式：中立 <<");
 					}
 					if (AdminConfig.VISION_GM_CONNECTION) {
 						player.setSeeState(CreatureSeeState.SEARCH2);
 						PacketSendUtility.broadcastPacket(player, new SM_PLAYER_STATE(player), true);
-						PacketSendUtility.sendMessage(player, ">> Connection in Vision mode <<");
+						PacketSendUtility.sendMessage(player, ">> 进入观察模式 <<");
 					}
 					if(AdminConfig.ADMIN_NO_CD_ON_CONNECTION) {
 						player.setCoolDownZero(true);
-						PacketSendUtility.sendMessage(player, ">> Connection in No CD mode <<");
+						PacketSendUtility.sendMessage(player, ">> 接受密语:关闭 <<");
 					}
-					
+
 					PacketSendUtility.sendMessage(player, "=============================");
 				}
 			}
@@ -497,6 +492,27 @@ public final class PlayerEnterWorldService {
 		else {
 			log.info("[DEBUG] enter world" + objectId + ", Player: " + player);
 		}
+
+		/**
+		 * 检测点卡是否存在
+		 */
+		if(player.getLevel() != 55){
+			PacketSendUtility.sendMessage(player, "您的角色尚未满级,可永久免费享受服务！");
+		}else{
+			if(player.getInventory().getItemCountByItemId(190100000)  > 0 ) { //周卡
+				log.info("[计费系统]]角色名: " + player.getName() + " 帐号: " + account.getName() + " 是周卡用户!");
+				PacketSendUtility.sendMessage(player, "亲爱的周卡守护者,您今天已连续在线" + account.getAccountTime().getAccumulatedOnlineMinutes() + "分钟,请合理安排游戏时间,切勿沉迷！");
+			} else if(player.getInventory().getItemCountByItemId(190100001)  > 0 ) { //月卡
+				log.info("[计费系统]]角色名: " + player.getName() + " 帐号: " + account.getName() + " 是月卡用户!");
+				PacketSendUtility.sendMessage(player, "亲爱的月卡守护者,您今天已连续在线" + account.getAccountTime().getAccumulatedOnlineMinutes() + "分钟,请合理安排游戏时间,切勿沉迷！");
+			} else if(player.getInventory().getItemCountByItemId(190100002)  > 0 ) { //季卡
+				log.info("[计费系统]]角色名: " + player.getName() + " 帐号: " + account.getName() + " 是季卡用户!");
+				PacketSendUtility.sendMessage(player, "亲爱的季卡守护者,您今天已连续在线" + account.getAccountTime().getAccumulatedOnlineMinutes() + "分钟,请合理安排游戏时间,切勿沉迷！");
+			}else{
+				PacketSendUtility.sendMessage(player, "使用时间到期。如果您想继续使用服务，请在10分钟内购买游戏点卡。");
+				log.info("[计费系统]]角色名: " + player.getName() + " 帐号: " + account.getName() + " 点卡过期!");
+			}
+		}
 	}
 
 	private static String formatBonus(float bonus) {
@@ -549,8 +565,7 @@ public final class PlayerEnterWorldService {
 	 * @param player
 	 */
 	private static void playerLoggedIn(Player player) {
-		log.info("Player logged in: " + player.getName() + " Account: "
-				+ player.getClientConnection().getAccount().getName());
+		log.info("账号:" + player.getClientConnection().getAccount().getName() + " 角色名:" + player.getName() + " 进入游戏！");
 		player.getCommonData().setOnline(true);
 		DAOManager.getDAO(PlayerDAO.class).onlinePlayer(player, true);
 		player.onLoggedIn();
@@ -560,16 +575,16 @@ public final class PlayerEnterWorldService {
 	private static void showPremiumAccountInfo(AionConnection client, Account account) {
 		byte membership = account.getMembership();
 		if (membership > 0) {
-			String accountType = "";
+			String accountType = "守护者";
 			switch (account.getMembership()) {
 				case 1:
-					accountType = "premium";
+					accountType = "守护者.";
 					break;
 				case 2:
-					accountType = "VIP";
+					accountType = "守护者.";
 					break;
 			}
-			client.sendPacket(new SM_MESSAGE(0, null, "Your account is " + accountType, ChatType.GOLDEN_YELLOW));
+			client.sendPacket(new SM_MESSAGE(0, null, "欢迎您回到亚特雷亚,尊敬的" + accountType, ChatType.GOLDEN_YELLOW));
 		}
 	}
 
@@ -596,7 +611,7 @@ class GeneralUpdateTask implements Runnable {
 				DAOManager.getDAO(PlayerRankDAO.class).loadCustomRank(player);
 			}
 			catch (Exception ex) {
-				log.error("Exception during periodic saving of player " + player.getName(), ex);
+				log.error("定期保存角色数据时出错 " + player.getName(), ex);
 			}
 		}
 
@@ -622,7 +637,7 @@ class ItemUpdateTask implements Runnable {
 				DAOManager.getDAO(ItemStoneListDAO.class).save(player);
 			}
 			catch (Exception ex) {
-				log.error("Exception during periodic saving of player items " + player.getName(), ex);
+				log.error("定期保存玩家物品时出错 " + player.getName(), ex);
 			}
 		}
 	}
