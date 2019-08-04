@@ -16,6 +16,12 @@
  */
 package com.aionemu.gameserver.services;
 
+
+import com.aionemu.gameserver.dataholders.DataManager;
+import com.aionemu.gameserver.model.stats.container.StatEnum;
+import com.aionemu.gameserver.skillengine.model.Effect;
+import com.aionemu.gameserver.skillengine.model.SkillTemplate;
+import com.aionemu.gameserver.utils.stats.StatFunctions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,18 +99,27 @@ public class PrivateStoreService {
 
 	/**
 	 * This method will create the player's store
+	 * 开启个人商店
 	 * 
 	 * @param activePlayer
 	 */
+
 	private static void createStore(Player activePlayer) {
 		if (activePlayer.isInState(CreatureState.RESTING)){
 			return;
 		}
 		activePlayer.setStore(new PrivateStore(activePlayer));
 		activePlayer.setState(CreatureState.PRIVATE_SHOP);
-		PacketSendUtility.broadcastPacket(activePlayer, new SM_EMOTION(activePlayer, EmotionType.OPEN_PRIVATESHOP, 0, 0),
-			true);
+		PacketSendUtility.broadcastPacket(activePlayer, new SM_EMOTION(activePlayer, EmotionType.OPEN_PRIVATESHOP, 0, 0), true);
+
+
+		SkillTemplate skillTemplate = DataManager.SKILL_DATA.getSkillTemplate(51000); //8291 复活后遗症  // 51000 10级后遗症
+		Effect speedUp = new Effect(activePlayer, activePlayer, skillTemplate, skillTemplate.getLvl(), 0);
+		speedUp.initialize();
+		speedUp.addAllEffectToSucess();
+		speedUp.applyEffect();
 	}
+
 
 	/**
 	 * This method will destroy the player's store
